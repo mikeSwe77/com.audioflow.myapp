@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .homey-form-group { margin-bottom: 20px; }
+    .homey-form-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+  </style>
+</head>
+<body class="homey-form">
+  <div class="homey-form-group">
+    <label class="homey-form-label" for="ip_address">Audioflow IP Address</label>
+    <input class="homey-form-input" id="ip_address" type="text" placeholder="192.168.1.50" />
+  </div>
+  <button class="homey-button-primary-full" id="connect-btn" onclick="sendIp()">Connect</button>
+
+  <script type="text/javascript">
+    function sendIp() {
+      const ip = document.getElementById('ip_address').value.trim();
+      const btn = document.getElementById('connect-btn');
+      
+      if (!ip) return Homey.alert('Please enter an IP address');
+      btn.classList.add('is-loading');
+
+      // Send the IP to the driver's 'set_ip' handler
+      Homey.emit('set_ip', { address: ip }, function(err, result) {
+        if (err) return Homey.alert(err);
+      // This tells the UI to move to the 'list_devices' step we defined in the manifest
+        Homey.showView('list_devices'); 
+    });
+    }
+  </script>
+</body>
+</html>

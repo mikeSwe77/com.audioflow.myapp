@@ -1,0 +1,54 @@
+{
+  "settings": {
+    "ip_address": "IP Address",
+    "polling_interval": "Polling Interval (seconds)"
+  },
+  "pair": {
+    "title": "Add Audioflow Device",
+    "instructions": "Enter the IP address of your Audioflow speaker switch",
+    "ip_placeholder": "192.168.1.100",
+    "add_button": "Add Device",
+    "connecting": "Connecting...",
+    "error": {
+      "invalid_ip": "Please enter a valid IP address",
+      "connection_failed": "Could not connect to device",
+      "timeout": "Connection timeout"
+    }
+  },
+  "device": {
+    "zones": {
+      "zone_a": "Zone A",
+      "zone_b": "Zone B",
+      "zone_c": "Zone C",
+      "zone_d": "Zone D"
+    }
+  },
+  "flow": {
+    "actions": {
+      "turn_zone_on": {
+        "title": "Turn zone on",
+        "hint": "Turn a specific zone on"
+      },
+      "turn_zone_off": {
+        "title": "Turn zone off",
+        "hint": "Turn a specific zone off"
+      },
+      "turn_all_zones_on": {
+        "title": "Turn all zones on",
+        "hint": "Turn all zones on at once"
+      },
+      "turn_all_zones_off": {
+        "title": "Turn all zones off",
+        "hint": "Turn all zones off at once"
+      },
+      "enable_zone": {
+        "title": "Enable zone",
+        "hint": "Enable a zone so it can be used"
+      },
+      "disable_zone": {
+        "title": "Disable zone",
+        "hint": "Disable a zone to prevent it from being used"
+      }
+    }
+  }
+}

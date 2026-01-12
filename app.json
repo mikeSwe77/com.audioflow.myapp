@@ -1,0 +1,532 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.audioflow.myapp",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "support": "https://github.com/mikeSwe77/com.audioflow.myapp/",
+  "brandColor": "#00d4ff",
+  "name": {
+    "en": "Audioflow"
+  },
+  "description": {
+    "en": "Control Audioflow speaker switches"
+  },
+  "category": [
+    "music"
+  ],
+  "author": {
+    "name": "Michael Edholm",
+    "email": "your-email@example.com"
+  },
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "source": "https://github.com/mikeSwe77/com.audioflow.myapp/",
+  "homepage": "https://github.com/mikeSwe77/com.audioflow.myapp/",
+  "bugs": {
+    "url": "https://github.com/mikeSwe77/com.audioflow.myapp/issues"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Michael Edholm"
+      }
+    ]
+  },
+  "flow": {
+    "triggers": [
+      {
+        "id": "zone_turned_off",
+        "title": {
+          "en": "A zone turned off",
+          "sv": "En zon slogs av"
+        },
+        "titleFormatted": {
+          "en": "Zone [[zone]] turned off",
+          "sv": "Zon [[zone]] slogs av"
+        },
+        "args": [
+          {
+            "name": "zone",
+            "type": "dropdown",
+            "title": {
+              "en": "Zone",
+              "sv": "Zon"
+            },
+            "label": {
+              "en": "Select Zone",
+              "sv": "Välj Zon"
+            },
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Zone 1",
+                  "sv": "Zon 1"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Zone 2",
+                  "sv": "Zon 2"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Zone 3",
+                  "sv": "Zon 3"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Zone 4",
+                  "sv": "Zon 4"
+                }
+              }
+            ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "zone_name",
+            "type": "string",
+            "example": "Köket",
+            "title": {
+              "en": "Zone Name",
+              "sv": "Zonnamn"
+            }
+          }
+        ]
+      },
+      {
+        "id": "zone_turned_on",
+        "title": {
+          "en": "A zone turned on",
+          "sv": "En zon slogs på"
+        },
+        "titleFormatted": {
+          "en": "Zone [[zone]] turned on",
+          "sv": "Zon [[zone]] slogs på"
+        },
+        "args": [
+          {
+            "name": "zone",
+            "type": "dropdown",
+            "title": {
+              "en": "Zone",
+              "sv": "Zon"
+            },
+            "label": {
+              "en": "Select Zone",
+              "sv": "Välj Zon"
+            },
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Zone 1",
+                  "sv": "Zon 1"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Zone 2",
+                  "sv": "Zon 2"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Zone 3",
+                  "sv": "Zon 3"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Zone 4",
+                  "sv": "Zon 4"
+                }
+              }
+            ]
+          }
+        ],
+        "tokens": [
+          {
+            "name": "zone_name",
+            "type": "string",
+            "example": "Köket",
+            "title": {
+              "en": "Zone Name",
+              "sv": "Zonnamn"
+            }
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "is_zone_on",
+        "title": {
+          "en": "Zone is on",
+          "sv": "Zonen är på"
+        },
+        "titleFormatted": {
+          "en": "[[zone]] is on",
+          "sv": "[[zone]] är på"
+        },
+        "args": [
+          {
+            "name": "zone",
+            "type": "dropdown",
+            "title": {
+              "en": "Zone",
+              "sv": "Zon"
+            },
+            "label": {
+              "en": "Select Zone",
+              "sv": "Välj zon"
+            },
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Zone 1",
+                  "sv": "Zon 1"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Zone 2",
+                  "sv": "Zon 2"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Zone 3",
+                  "sv": "Zon 3"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Zone 4",
+                  "sv": "Zon 4"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "turn_all_zones_off",
+        "title": {
+          "en": "Turn all zones off",
+          "sv": "Stäng av alla zoner"
+        },
+        "titleFormatted": {
+          "en": "Turn all zones off",
+          "sv": "Stäng av alla zoner"
+        }
+      },
+      {
+        "id": "turn_zone_off",
+        "title": {
+          "en": "Turn a zone off",
+          "sv": "Slå av en zon"
+        },
+        "titleFormatted": {
+          "en": "Turn [[zone]] off",
+          "sv": "Slå av [[zone]]"
+        },
+        "args": [
+          {
+            "name": "zone",
+            "type": "dropdown",
+            "title": {
+              "en": "Zone",
+              "sv": "Zon"
+            },
+            "label": {
+              "en": "Select Zone",
+              "sv": "Välj zon"
+            },
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Zone 1",
+                  "sv": "Zon 1"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Zone 2",
+                  "sv": "Zon 2"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Zone 3",
+                  "sv": "Zon 3"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Zone 4",
+                  "sv": "Zon 4"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "turn_zone_on",
+        "title": {
+          "en": "Turn a zone on",
+          "sv": "Slå på en zon"
+        },
+        "titleFormatted": {
+          "en": "Turn [[zone]] on",
+          "sv": "Slå på [[zone]]"
+        },
+        "args": [
+          {
+            "name": "zone",
+            "type": "dropdown",
+            "title": {
+              "en": "Zone",
+              "sv": "Zon"
+            },
+            "label": {
+              "en": "Select Zone",
+              "sv": "Välj zon"
+            },
+            "values": [
+              {
+                "id": "1",
+                "label": {
+                  "en": "Zone 1",
+                  "sv": "Zon 1"
+                }
+              },
+              {
+                "id": "2",
+                "label": {
+                  "en": "Zone 2",
+                  "sv": "Zon 2"
+                }
+              },
+              {
+                "id": "3",
+                "label": {
+                  "en": "Zone 3",
+                  "sv": "Zon 3"
+                }
+              },
+              {
+                "id": "4",
+                "label": {
+                  "en": "Zone 4",
+                  "sv": "Zon 4"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Audioflow Switch"
+      },
+      "class": "amplifier",
+      "capabilities": [
+        "zone_btn_1",
+        "zone_btn_2",
+        "zone_btn_3",
+        "zone_btn_4"
+      ],
+      "capabilitiesOptions": {
+        "zone_btn_1": {
+          "title": {
+            "en": "Zone 1",
+            "sv": "Zon 1"
+          }
+        },
+        "zone_btn_2": {
+          "title": {
+            "en": "Zone 2",
+            "sv": "Zon 2"
+          }
+        },
+        "zone_btn_3": {
+          "title": {
+            "en": "Zone 3",
+            "sv": "Zon 3"
+          }
+        },
+        "zone_btn_4": {
+          "title": {
+            "en": "Zone 4",
+            "sv": "Zon 4"
+          }
+        }
+      },
+      "connectivity": [
+        "lan"
+      ],
+      "settings": [
+        {
+          "id": "exclusive_mode",
+          "type": "checkbox",
+          "label": {
+            "en": "Exclusive Mode (One Zone at a time)",
+            "sv": "Exklusivt läge (En zon åt gången)"
+          },
+          "value": false
+        },
+        {
+          "id": "ip_address",
+          "type": "text",
+          "label": {
+            "en": "IP Address"
+          },
+          "options": {
+            "hidden": true
+          }
+        },
+        {
+          "id": "enabled_zone1",
+          "type": "checkbox",
+          "label": {
+            "en": "Enable Zone 1",
+            "sv": "Aktivera Zon 1"
+          },
+          "value": true
+        },
+        {
+          "id": "enabled_zone2",
+          "type": "checkbox",
+          "label": {
+            "en": "Enable Zone 2",
+            "sv": "Aktivera Zon 2"
+          },
+          "value": true
+        },
+        {
+          "id": "enabled_zone3",
+          "type": "checkbox",
+          "label": {
+            "en": "Enable Zone 3",
+            "sv": "Aktivera Zon 3"
+          },
+          "value": true
+        },
+        {
+          "id": "enabled_zone4",
+          "type": "checkbox",
+          "label": {
+            "en": "Enable Zone 4",
+            "sv": "Aktivera Zon 4"
+          },
+          "value": true
+        }
+      ],
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "label": {
+            "en": "Find new IP address"
+          }
+        }
+      ],
+      "images": {
+        "small": "/drivers/audioflow/assets/images/small.png",
+        "large": "/drivers/audioflow/assets/images/large.png",
+        "xlarge": "/drivers/audioflow/assets/images/xlarge.png"
+      },
+      "id": "audioflow"
+    }
+  ],
+  "capabilities": {
+    "zone_btn_1": {
+      "type": "boolean",
+      "title": {
+        "en": "Zone 1",
+        "sv": "Zon 1"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/icon.svg"
+    },
+    "zone_btn_2": {
+      "type": "boolean",
+      "title": {
+        "en": "Zone 2",
+        "sv": "Zon 2"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/icon.svg"
+    },
+    "zone_btn_3": {
+      "type": "boolean",
+      "title": {
+        "en": "Zone 3",
+        "sv": "Zon 3"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/icon.svg"
+    },
+    "zone_btn_4": {
+      "type": "boolean",
+      "title": {
+        "en": "Zone 4",
+        "sv": "Zon 4"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/icon.svg"
+    }
+  }
+}

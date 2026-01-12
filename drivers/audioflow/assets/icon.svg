@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background -->
+  <rect width="200" height="200" rx="20" fill="#2a2a2a"/>
+  
+  <!-- Device body (speaker switch box) -->
+  <rect x="30" y="40" width="140" height="120" rx="10" fill="#3a3a3a" stroke="#00d4ff" stroke-width="3"/>
+  
+  <!-- Speaker grille lines -->
+  <line x1="50" y1="70" x2="150" y2="70" stroke="#555" stroke-width="2"/>
+  <line x1="50" y1="80" x2="150" y2="80" stroke="#555" stroke-width="2"/>
+  <line x1="50" y1="90" x2="150" y2="90" stroke="#555" stroke-width="2"/>
+  <line x1="50" y1="100" x2="150" y2="100" stroke="#555" stroke-width="2"/>
+  
+  <!-- Zone indicators (4 LEDs) -->
+  <circle cx="60" cy="125" r="8" fill="#00d4ff"/>
+  <circle cx="90" cy="125" r="8" fill="#00d4ff"/>
+  <circle cx="110" cy="125" r="8" fill="#555"/>
+  <circle cx="140" cy="125" r="8" fill="#555"/>
+  
+  <!-- Zone labels -->
+  <text x="60" y="148" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#888" text-anchor="middle">A</text>
+  <text x="90" y="148" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#888" text-anchor="middle">B</text>
+  <text x="110" y="148" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#888" text-anchor="middle">C</text>
+  <text x="140" y="148" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#888" text-anchor="middle">D</text>
+  
+  <!-- Audioflow branding -->
+  <text x="100" y="25" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#00d4ff" text-anchor="middle">AUDIOFLOW</text>
+</svg>

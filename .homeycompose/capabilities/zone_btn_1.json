@@ -1,0 +1,8 @@
+{
+  "type": "boolean",
+  "title": { "en": "Zone 1", "sv": "Zon 1" },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "button",
+  "icon": "/assets/icon.svg"
+}

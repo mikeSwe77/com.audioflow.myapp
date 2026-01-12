@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ip_address",
+    "type": "text",
+    "label": { "en": "IP Address" },
+    "value": ""
+  },
+  {
+    "id": "polling_interval",
+    "type": "number",
+    "label": { "en": "Polling Interval" },
+    "value": 5,
+    "min": 1,
+    "max": 60
+  }
+]

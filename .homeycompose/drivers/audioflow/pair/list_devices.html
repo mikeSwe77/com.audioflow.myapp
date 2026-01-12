@@ -1,0 +1,12 @@
+<script type="text/javascript">
+Homey.setTitle('Select Audioflow Switch');
+
+Homey.emit('list_devices', null, function( err, result ) {
+    if( err ) return Homey.alert(err);
+    
+    // result is the array of devices returned by resolve() in driver.js
+    // Homey handles the rendering of the list automatically if you use standard views,
+    // but for custom "list_devices" logic, usually just returning the array in driver.js 
+    // combined with the "list_devices" template in driver.compose.json is enough.
+});
+</script>

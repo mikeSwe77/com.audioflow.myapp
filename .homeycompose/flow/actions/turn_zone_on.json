@@ -1,0 +1,19 @@
+{
+  "id": "turn_zone_on",
+  "title": { "en": "Turn a zone on", "sv": "Slå på en zon" },
+  "titleFormatted": { "en": "Turn [[zone]] on", "sv": "Slå på [[zone]]" },
+  "args": [
+    {
+      "name": "zone",
+      "type": "dropdown",
+      "title": { "en": "Zone", "sv": "Zon" },
+      "label": { "en": "Select Zone", "sv": "Välj zon" },
+      "values": [
+        { "id": "1", "label": { "en": "Zone 1", "sv": "Zon 1" } },
+        { "id": "2", "label": { "en": "Zone 2", "sv": "Zon 2" } },
+        { "id": "3", "label": { "en": "Zone 3", "sv": "Zon 3" } },
+        { "id": "4", "label": { "en": "Zone 4", "sv": "Zon 4" } }
+      ]
+    }
+  ]
+}

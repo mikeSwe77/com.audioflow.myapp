@@ -1,0 +1,43 @@
+{
+  "id": "com.audioflow.myapp",
+  "version": "1.0.0",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "support": "https://github.com/mikeSwe77/com.audioflow.myapp/issues",
+
+  "brandColor": "#00d4ff",
+  "name": {
+    "en": "Audioflow"
+  },
+  "description": {
+    "en": "Control Audioflow speaker switches"
+  },
+  "category": [
+    "music"
+  ],
+  "author": {
+    "name": "Michael Edholm",
+    "email": "your-email@example.com"
+  },
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "support": "https://github.com/mikeSwe77/com.audioflow.myapp/",
+  "source": "https://github.com/mikeSwe77/com.audioflow.myapp/",
+  "homepage": "https://github.com/mikeSwe77/com.audioflow.myapp/",
+  "bugs": {
+    "url": "https://github.com/mikeSwe77/com.audioflow.myapp/issues"
+  },
+  "contributors": {
+    "developers": [
+      {
+        "name": "Michael Edholm"
+      }
+    ]
+  }
+}

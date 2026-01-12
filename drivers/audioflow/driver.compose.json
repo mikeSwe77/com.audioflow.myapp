@@ -1,0 +1,81 @@
+{
+  "name": { "en": "Audioflow Switch" },
+  "class": "amplifier",
+  "capabilities": [
+    "zone_btn_1",
+    "zone_btn_2",
+    "zone_btn_3",
+    "zone_btn_4"
+  ],
+  "capabilitiesOptions": {
+    "zone_btn_1": { "title": { "en": "Zone 1", "sv": "Zon 1" } },
+    "zone_btn_2": { "title": { "en": "Zone 2", "sv": "Zon 2" } },
+    "zone_btn_3": { "title": { "en": "Zone 3", "sv": "Zon 3" } },
+    "zone_btn_4": { "title": { "en": "Zone 4", "sv": "Zon 4" } }
+  },
+  "connectivity": [ "lan" ],
+  "settings": [
+    {
+      "id": "exclusive_mode",
+      "type": "checkbox",
+      "label": {
+        "en": "Exclusive Mode (One Zone at a time)",
+        "sv": "Exklusivt läge (En zon åt gången)"
+      },
+      "value": false
+    },
+    {
+      "id": "ip_address",
+      "type": "text",
+      "label": { "en": "IP Address" },
+      "options": { "hidden": true } 
+    },
+    {
+      "id": "enabled_zone1",
+      "type": "checkbox",
+      "label": { "en": "Enable Zone 1", "sv": "Aktivera Zon 1" },
+      "value": true
+    },
+    {
+      "id": "enabled_zone2",
+      "type": "checkbox",
+      "label": { "en": "Enable Zone 2", "sv": "Aktivera Zon 2" },
+      "value": true
+    },
+    {
+      "id": "enabled_zone3",
+      "type": "checkbox",
+      "label": { "en": "Enable Zone 3", "sv": "Aktivera Zon 3" },
+      "value": true
+    },
+    {
+      "id": "enabled_zone4",
+      "type": "checkbox",
+      "label": { "en": "Enable Zone 4", "sv": "Aktivera Zon 4" },
+      "value": true
+    }
+  ],
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": { "next": "add_devices" }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "repair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "label": { "en": "Find new IP address" }
+    }
+  ],
+  "images": {
+    "small": "/drivers/audioflow/assets/images/small.png",
+    "large": "/drivers/audioflow/assets/images/large.png",
+    "xlarge": "/drivers/audioflow/assets/images/xlarge.png"
+  }
+}
