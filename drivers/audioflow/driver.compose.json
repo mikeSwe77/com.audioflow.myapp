@@ -1,6 +1,7 @@
 {
   "name": { "en": "Audioflow Switch" },
   "class": "amplifier",
+  "platforms": [ "local" ],
   "capabilities": [
     "zone_btn_1",
     "zone_btn_2",

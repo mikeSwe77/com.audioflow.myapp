@@ -20,7 +20,7 @@
   ],
   "author": {
     "name": "Michael Edholm",
-    "email": "your-email@example.com"
+    "email": "michael.edholm@outlook.com"
   },
   "images": {
     "small": "/assets/images/small.png",
@@ -361,6 +361,9 @@
         "en": "Audioflow Switch"
       },
       "class": "amplifier",
+      "platforms": [
+        "local"
+      ],
       "capabilities": [
         "zone_btn_1",
         "zone_btn_2",
