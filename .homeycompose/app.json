@@ -1,13 +1,12 @@
 {
   "id": "com.audioflow.myapp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
     "local"
   ],
-  "support": "https://github.com/mikeSwe77/com.audioflow.myapp/issues",
-
+  "support": "https://github.com/mikeSwe77/com.audioflow.myapp/",
   "brandColor": "#00d4ff",
   "name": {
     "en": "Audioflow"
@@ -27,7 +26,6 @@
     "large": "/assets/images/large.png",
     "xlarge": "/assets/images/xlarge.png"
   },
-  "support": "https://github.com/mikeSwe77/com.audioflow.myapp/",
   "source": "https://github.com/mikeSwe77/com.audioflow.myapp/",
   "homepage": "https://github.com/mikeSwe77/com.audioflow.myapp/",
   "bugs": {
