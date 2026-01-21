@@ -9,7 +9,12 @@ class AudioflowDevice extends Homey.Device {
     this.log('Audioflow device onInit started');
     
     const ip = this.getSetting('ip_address');
+    const model = this.getStoreValue('model'); // Get the model saved during discovery
     
+    // Determine how many zones this device has
+    this.zoneCount = this._getZoneCount(model);
+    this.log(`Model: ${model}, Zones: ${this.zoneCount}`);
+
     if (!ip) {
       this.setUnavailable('No IP address configured').catch(this.error);
       return; 
@@ -17,21 +22,34 @@ class AudioflowDevice extends Homey.Device {
     
     this.client = new AudioflowClient(ip);
 
-    // Register listeners for button capabilities
+    // 1. Clean up excessive capabilities (e.g., remove zone 3 & 4 on a 2-zone device)
     for (let i = 1; i <= 4; i++) {
-      const capabilityId = `zone_btn_${i}`; 
-      if (this.hasCapability(capabilityId)) {
-        this.registerCapabilityListener(capabilityId, async (value) => {
-          this.log(`UI Button Action: Setting Zone ${i} to ${value}`);
-          return await this.client.setZoneState(i, value);
-        });
+      const capabilityId = `zone_btn_${i}`;
+      if (i > this.zoneCount && this.hasCapability(capabilityId)) {
+        this.log(`Removing capability ${capabilityId} for model ${model}`);
+        await this.removeCapability(capabilityId).catch(this.error);
       }
+    }
+
+    // 2. Register listeners ONLY for the valid zones
+    for (let i = 1; i <= this.zoneCount; i++) {
+      const capabilityId = `zone_btn_${i}`; 
+      
+      // Ensure the capability exists (in case it was previously removed or hidden)
+      if (!this.hasCapability(capabilityId)) {
+        await this.addCapability(capabilityId).catch(this.error);
+      }
+
+      this.registerCapabilityListener(capabilityId, async (value) => {
+        this.log(`UI Button Action: Setting Zone ${i} to ${value}`);
+        return await this.client.setZoneState(i, value);
+      });
     }
 
     this._registerFlowActions();
     this._registerFlowConditions();
   
-    // Run sync immediately to handle visibility and naming
+    // Run sync immediately
     await this._syncWithHardware();
 
     // Start periodic polling
@@ -45,20 +63,29 @@ class AudioflowDevice extends Homey.Device {
     }
   }  
 
+  _getZoneCount(model) {
+    if (model === '3S-2Z') return 2;
+    if (model === '3S-3Z') return 3;
+    return 4; // Default to 4 for 3S-4Z or if unknown
+  }
+
   _registerFlowActions() {
     this.homey.flow.getActionCard('turn_zone_on').registerRunListener(async (args) => {
       const zoneNum = parseInt(args.zone);
+      if (zoneNum > this.zoneCount) throw new Error('Zone not available on this device');
       return await this.client.setZoneState(zoneNum, true);
     });
 
     this.homey.flow.getActionCard('turn_zone_off').registerRunListener(async (args) => {
       const zoneNum = parseInt(args.zone);
+      if (zoneNum > this.zoneCount) throw new Error('Zone not available on this device');
       return await this.client.setZoneState(zoneNum, false);
     });
 
     this.homey.flow.getActionCard('turn_all_zones_off').registerRunListener(async () => {
       this.log('Flow Action: Turning ALL zones OFF');
-      for (let i = 1; i <= 4; i++) {
+      // Only iterate through supported zones
+      for (let i = 1; i <= this.zoneCount; i++) {
         try {
           await this.client.setZoneState(i, false);
         } catch (err) {
@@ -71,9 +98,10 @@ class AudioflowDevice extends Homey.Device {
 
   _registerFlowConditions() {
     this.homey.flow.getConditionCard('is_zone_on').registerRunListener(async (args) => {
-      const capabilityId = `zone_btn_${args.zone}`; 
+      const zoneNum = parseInt(args.zone);
+      const capabilityId = `zone_btn_${zoneNum}`; 
       
-      // If button is hidden/disabled, it is treated as off
+      if (zoneNum > this.zoneCount) return false;
       if (!this.hasCapability(capabilityId)) return false;
 
       return !!this.getCapabilityValue(capabilityId);
@@ -87,21 +115,21 @@ class AudioflowDevice extends Homey.Device {
 
   async _syncWithHardware() {
     try {
-      // Fetch Zones
       const data = await this.client.getZones(); 
       const zones = Array.isArray(data) ? data : (data.zones || []);
 
-      // Fetch Switch Settings (Exclusive Mode)
       let switchData = {};
       try {
         switchData = await this.client.getSwitch();
-      } catch (err) {
-        // Silently fail if getSwitch isn't implemented or supported yet
-      }
+      } catch (err) { }
 
-      // --- SYNC ZONES ---
+      // Sync Zones (Only iterate up to this.zoneCount)
       for (const zoneData of zones) {
         const zoneNum = parseInt(zoneData.id) + 1; 
+        
+        // Skip if hardware reports more zones than we support/expect for this model
+        if (zoneNum > this.zoneCount) continue;
+
         const capabilityId = `zone_btn_${zoneNum}`;
         const settingId = `enabled_zone${zoneNum}`;
         
@@ -109,25 +137,21 @@ class AudioflowDevice extends Homey.Device {
         const isHardwareEnabled = zoneData.enabled === 1; 
         const zoneName = zoneData.name || `Zone ${zoneNum}`;
 
-        // Visibility Logic: Hide if disabled
+        // Visibility Logic: Hide if disabled via hardware switch/settings
         if (!isHardwareEnabled && this.hasCapability(capabilityId)) {
-          this.log(`Hiding ${capabilityId} because it is disabled.`);
+          // Only hide it if it's within our valid range but disabled in settings
           await this.removeCapability(capabilityId);
           continue; 
         }
 
         // Visibility Logic: Show if enabled
         if (isHardwareEnabled && !this.hasCapability(capabilityId)) {
-          this.log(`Showing ${capabilityId} because it is enabled.`);
           await this.addCapability(capabilityId);
-          
           this.registerCapabilityListener(capabilityId, async (value) => {
-             this.log(`UI Button Action: Setting Zone ${zoneNum} to ${value}`);
              return await this.client.setZoneState(zoneNum, value);
           });
         }
 
-        // Sync State and Name (Only if visible)
         if (this.hasCapability(capabilityId)) {
           const previousState = this.getCapabilityValue(capabilityId);
           if (previousState !== isCurrentlyOn) {
@@ -143,18 +167,18 @@ class AudioflowDevice extends Homey.Device {
           try {
             const currentOptions = this.getCapabilityOptions(capabilityId);
             if (!currentOptions || currentOptions.title !== zoneName) {
-               this.log(`Updating name for ${capabilityId} to ${zoneName}`);
                await this.setCapabilityOptions(capabilityId, { title: zoneName });
-               
-               await this.setSettingsConfig({
-                  [settingId]: {
-                    label: { en: `Enable ${zoneName}`, sv: `Aktivera ${zoneName}` }
-                  }
-               });
+               // Update settings label if settings exist
+               const settingsConfig = this.getSettingsConfig ? await this.getSettingsConfig() : null; // Check availability
+               if(settingsConfig) {
+                   await this.setSettingsConfig({
+                      [settingId]: {
+                        label: { en: `Enable ${zoneName}`, sv: `Aktivera ${zoneName}` }
+                      }
+                   });
+               }
             }
-          } catch (err) {
-             this.error('Error updating zone name:', err);
-          }
+          } catch (err) { }
         }
 
         // Sync Checkbox Setting
@@ -163,7 +187,7 @@ class AudioflowDevice extends Homey.Device {
         }
       }
 
-      // --- SYNC EXCLUSIVE MODE ---
+      // Sync Exclusive Mode
       if (switchData && typeof switchData.exclusive !== 'undefined') {
         const isExclusive = switchData.exclusive === true;
         if (this.getSetting('exclusive_mode') !== isExclusive) {
@@ -179,15 +203,14 @@ class AudioflowDevice extends Homey.Device {
   async onSettings({ oldSettings, newSettings, changedKeys }) {
     for (const key of changedKeys) {
       
-      // Zone Enable/Disable
       if (key.startsWith('enabled_zone')) {
         const zoneNum = parseInt(key.replace('enabled_zone', ''));
+        // Safety check
+        if (zoneNum > this.zoneCount) continue;
+
         const isEnabled = newSettings[key];
         
-        this.log(`Settings: Changing Zone ${zoneNum} enabled state to ${isEnabled}`);
-
         try {
-          // Preserve name during toggle
           const capabilityId = `zone_btn_${zoneNum}`;
           let currentName = `Zone ${zoneNum}`;
           if (this.hasCapability(capabilityId)) {
@@ -201,10 +224,8 @@ class AudioflowDevice extends Homey.Device {
         }
       }
 
-      // Exclusive Mode Toggle
       if (key === 'exclusive_mode') {
          const mode = newSettings[key] ? 'enable' : 'disable';
-         this.log(`Settings: Setting exclusive mode to ${mode}`);
          try {
            await this.client.setExclusiveMode(mode);
          } catch(err) {
