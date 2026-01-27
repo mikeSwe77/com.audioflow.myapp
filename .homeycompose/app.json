@@ -7,12 +7,12 @@
     "local"
   ],
   "support": "https://github.com/mikeSwe77/com.audioflow.myapp/",
-  "brandColor": "#00d4ff",
+  "brandColor": "#2ab9b5",
   "name": {
     "en": "Audioflow"
   },
   "description": {
-    "en": "Control Audioflow speaker switches"
+    "en": "Connect multiple pairs of speakers to your amplifier"
   },
   "category": [
     "music"
