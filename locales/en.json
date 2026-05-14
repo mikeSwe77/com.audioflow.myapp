@@ -15,14 +15,6 @@
       "timeout": "Connection timeout"
     }
   },
-  "device": {
-    "zones": {
-      "zone_a": "Zone A",
-      "zone_b": "Zone B",
-      "zone_c": "Zone C",
-      "zone_d": "Zone D"
-    }
-  },
   "flow": {
     "actions": {
       "turn_zone_on": {
@@ -40,14 +32,6 @@
       "turn_all_zones_off": {
         "title": "Turn all zones off",
         "hint": "Turn all zones off at once"
-      },
-      "enable_zone": {
-        "title": "Enable zone",
-        "hint": "Enable a zone so it can be used"
-      },
-      "disable_zone": {
-        "title": "Disable zone",
-        "hint": "Disable a zone to prevent it from being used"
       }
     }
   }

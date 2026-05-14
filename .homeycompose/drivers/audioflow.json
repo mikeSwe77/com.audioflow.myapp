@@ -1,14 +1,16 @@
 {
-  "name": { "en": "Audioflow Speaker Switch" },
-  "class": "speaker",
-  "capabilities": ["onoff.zone1", "onoff.zone2", "onoff.zone3", "onoff.zone4"],
+  "name": { "en": "Audioflow Switch" },
+  "class": "amplifier",
+  "capabilities": ["zone_btn_1", "zone_btn_2", "zone_btn_3", "zone_btn_4"],
   "pair": [
     {
-      "id": "pair"
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": { "next": "add_devices" }
     },
     {
-      "id": "list_devices",
-      "template": "list_devices"
+      "id": "add_devices",
+      "template": "add_devices"
     }
   ]
 }

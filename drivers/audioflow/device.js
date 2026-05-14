@@ -42,18 +42,25 @@ class AudioflowDevice extends Homey.Device {
 
       this.registerCapabilityListener(capabilityId, async (value) => {
         this.log(`UI Button Action: Setting Zone ${i} to ${value}`);
-        return await this.client.setZoneState(i, value);
+        await this.client.setZoneState(i, value);
+        const triggerId = value ? 'zone_turned_on' : 'zone_turned_off';
+        const zoneName = (this.getCapabilityOptions(capabilityId) || {}).title || `Zone ${i}`;
+        this.homey.flow.getTriggerCard(triggerId)
+          .trigger({ zone_name: zoneName }, { zone: String(i) })
+          .catch(() => {});
       });
     }
 
     this._registerFlowActions();
     this._registerFlowConditions();
+    this._registerFlowTriggers();
   
     // Run sync immediately
     await this._syncWithHardware();
 
     // Start periodic polling
-    this._startPolling(5);
+    const pollInterval = this.getSetting('polling_interval') || 5;
+    this._startPolling(pollInterval);
   }
 
   async onDeleted() {
@@ -71,20 +78,31 @@ class AudioflowDevice extends Homey.Device {
 
   _registerFlowActions() {
     this.homey.flow.getActionCard('turn_zone_on').registerRunListener(async (args) => {
-      const zoneNum = parseInt(args.zone);
-      if (zoneNum > this.zoneCount) throw new Error('Zone not available on this device');
+      const zoneNum = parseInt(args.zone.id);
+      if (isNaN(zoneNum) || zoneNum > this.zoneCount) throw new Error('Zone not available on this device');
       return await this.client.setZoneState(zoneNum, true);
     });
 
     this.homey.flow.getActionCard('turn_zone_off').registerRunListener(async (args) => {
-      const zoneNum = parseInt(args.zone);
-      if (zoneNum > this.zoneCount) throw new Error('Zone not available on this device');
+      const zoneNum = parseInt(args.zone.id);
+      if (isNaN(zoneNum) || zoneNum > this.zoneCount) throw new Error('Zone not available on this device');
       return await this.client.setZoneState(zoneNum, false);
+    });
+
+    this.homey.flow.getActionCard('turn_all_zones_on').registerRunListener(async () => {
+      this.log('Flow Action: Turning ALL zones ON');
+      for (let i = 1; i <= this.zoneCount; i++) {
+        try {
+          await this.client.setZoneState(i, true);
+        } catch (err) {
+          this.error(`Failed to turn on zone ${i}:`, err.message);
+        }
+      }
+      return true;
     });
 
     this.homey.flow.getActionCard('turn_all_zones_off').registerRunListener(async () => {
       this.log('Flow Action: Turning ALL zones OFF');
-      // Only iterate through supported zones
       for (let i = 1; i <= this.zoneCount; i++) {
         try {
           await this.client.setZoneState(i, false);
@@ -92,20 +110,28 @@ class AudioflowDevice extends Homey.Device {
           this.error(`Failed to turn off zone ${i}:`, err.message);
         }
       }
-      return true; 
+      return true;
     });
   }
 
   _registerFlowConditions() {
     this.homey.flow.getConditionCard('is_zone_on').registerRunListener(async (args) => {
-      const zoneNum = parseInt(args.zone);
-      const capabilityId = `zone_btn_${zoneNum}`; 
-      
-      if (zoneNum > this.zoneCount) return false;
+      const zoneNum = parseInt(args.zone.id);
+      const capabilityId = `zone_btn_${zoneNum}`;
+
+      if (isNaN(zoneNum) || zoneNum > this.zoneCount) return false;
       if (!this.hasCapability(capabilityId)) return false;
 
       return !!this.getCapabilityValue(capabilityId);
     });
+  }
+
+  _registerFlowTriggers() {
+    this.homey.flow.getTriggerCard('zone_turned_on')
+      .registerRunListener(async (args, state) => args.zone.id === state.zone);
+
+    this.homey.flow.getTriggerCard('zone_turned_off')
+      .registerRunListener(async (args, state) => args.zone.id === state.zone);
   }
 
   _startPolling(intervalSeconds) {
@@ -158,8 +184,8 @@ class AudioflowDevice extends Homey.Device {
             this.setCapabilityValue(capabilityId, isCurrentlyOn).catch(this.error);
             
             const triggerId = isCurrentlyOn ? 'zone_turned_on' : 'zone_turned_off';
-            this.homey.flow.getDeviceTriggerCard(triggerId)
-              .trigger(this, { zone_name: zoneName }, { zone: String(zoneNum) })
+            this.homey.flow.getTriggerCard(triggerId)
+              .trigger({ zone_name: zoneName }, { zone: String(zoneNum) })
               .catch(() => {});
           }
 
@@ -167,16 +193,7 @@ class AudioflowDevice extends Homey.Device {
           try {
             const currentOptions = this.getCapabilityOptions(capabilityId);
             if (!currentOptions || currentOptions.title !== zoneName) {
-               await this.setCapabilityOptions(capabilityId, { title: zoneName });
-               // Update settings label if settings exist
-               const settingsConfig = this.getSettingsConfig ? await this.getSettingsConfig() : null; // Check availability
-               if(settingsConfig) {
-                   await this.setSettingsConfig({
-                      [settingId]: {
-                        label: { en: `Enable ${zoneName}`, sv: `Aktivera ${zoneName}` }
-                      }
-                   });
-               }
+              await this.setCapabilityOptions(capabilityId, { title: zoneName });
             }
           } catch (err) { }
         }

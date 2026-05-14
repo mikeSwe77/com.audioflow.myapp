@@ -10,6 +10,36 @@ class AudioflowDriver extends Homey.Driver {
    */
   async onInit() {
     this.log('Audioflow driver has been initialized');
+    this._registerFlowAutocomplete();
+  }
+
+  _getZoneList(query) {
+    const device = this.getDevices()[0];
+    const results = [];
+    const zoneCount = device ? (device.zoneCount || 4) : 4;
+
+    for (let i = 1; i <= zoneCount; i++) {
+      const capId = `zone_btn_${i}`;
+      let name = `Zone ${i}`;
+      if (device && device.hasCapability(capId)) {
+        const opts = device.getCapabilityOptions(capId);
+        if (opts && opts.title) name = opts.title;
+      }
+      if (!query || name.toLowerCase().includes(query.toLowerCase())) {
+        results.push({ id: String(i), name });
+      }
+    }
+    return results;
+  }
+
+  _registerFlowAutocomplete() {
+    const autocomplete = async (query) => this._getZoneList(query);
+
+    this.homey.flow.getTriggerCard('zone_turned_on').registerArgumentAutocompleteListener('zone', autocomplete);
+    this.homey.flow.getTriggerCard('zone_turned_off').registerArgumentAutocompleteListener('zone', autocomplete);
+    this.homey.flow.getActionCard('turn_zone_on').registerArgumentAutocompleteListener('zone', autocomplete);
+    this.homey.flow.getActionCard('turn_zone_off').registerArgumentAutocompleteListener('zone', autocomplete);
+    this.homey.flow.getConditionCard('is_zone_on').registerArgumentAutocompleteListener('zone', autocomplete);
   }
 
   /**
