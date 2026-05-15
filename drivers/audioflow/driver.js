@@ -16,21 +16,21 @@ class AudioflowDriver extends Homey.Driver {
   }
 
   _registerFlowRunListeners() {
-    this.getActionCard('turn_zone_on').registerRunListener(async (args) => {
+    this.homey.flow.getActionCard('turn_zone_on').registerRunListener(async (args) => {
       const device = args.device;
       const zoneNum = parseInt(args.zone.id);
       if (isNaN(zoneNum) || zoneNum > device.zoneCount) throw new Error('Zone not available on this device');
       return device.client.setZoneState(zoneNum, true);
     });
 
-    this.getActionCard('turn_zone_off').registerRunListener(async (args) => {
+    this.homey.flow.getActionCard('turn_zone_off').registerRunListener(async (args) => {
       const device = args.device;
       const zoneNum = parseInt(args.zone.id);
       if (isNaN(zoneNum) || zoneNum > device.zoneCount) throw new Error('Zone not available on this device');
       return device.client.setZoneState(zoneNum, false);
     });
 
-    this.getActionCard('turn_all_zones_on').registerRunListener(async (args) => {
+    this.homey.flow.getActionCard('turn_all_zones_on').registerRunListener(async (args) => {
       const device = args.device;
       device.log('Flow Action: Turning ALL zones ON');
       for (let i = 1; i <= device.zoneCount; i++) {
@@ -41,7 +41,7 @@ class AudioflowDriver extends Homey.Driver {
       return true;
     });
 
-    this.getActionCard('turn_all_zones_off').registerRunListener(async (args) => {
+    this.homey.flow.getActionCard('turn_all_zones_off').registerRunListener(async (args) => {
       const device = args.device;
       device.log('Flow Action: Turning ALL zones OFF');
       for (let i = 1; i <= device.zoneCount; i++) {
@@ -52,7 +52,7 @@ class AudioflowDriver extends Homey.Driver {
       return true;
     });
 
-    this.getConditionCard('is_zone_on').registerRunListener(async (args) => {
+    this.homey.flow.getConditionCard('is_zone_on').registerRunListener(async (args) => {
       const device = args.device;
       const zoneNum = parseInt(args.zone.id);
       const capabilityId = `zone_btn_${zoneNum}`;
@@ -61,10 +61,10 @@ class AudioflowDriver extends Homey.Driver {
       return !!device.getCapabilityValue(capabilityId);
     });
 
-    this.getDeviceTriggerCard('zone_turned_on')
+    this.homey.flow.getDeviceTriggerCard('zone_turned_on')
       .registerRunListener(async (args, state) => args.zone.id === state.zone);
 
-    this.getDeviceTriggerCard('zone_turned_off')
+    this.homey.flow.getDeviceTriggerCard('zone_turned_off')
       .registerRunListener(async (args, state) => args.zone.id === state.zone);
   }
 
@@ -89,11 +89,11 @@ class AudioflowDriver extends Homey.Driver {
   _registerFlowAutocomplete() {
     const autocomplete = async (query, args) => this._getZoneList(query, args.device);
 
-    this.getDeviceTriggerCard('zone_turned_on').registerArgumentAutocompleteListener('zone', autocomplete);
-    this.getDeviceTriggerCard('zone_turned_off').registerArgumentAutocompleteListener('zone', autocomplete);
-    this.getActionCard('turn_zone_on').registerArgumentAutocompleteListener('zone', autocomplete);
-    this.getActionCard('turn_zone_off').registerArgumentAutocompleteListener('zone', autocomplete);
-    this.getConditionCard('is_zone_on').registerArgumentAutocompleteListener('zone', autocomplete);
+    this.homey.flow.getDeviceTriggerCard('zone_turned_on').registerArgumentAutocompleteListener('zone', autocomplete);
+    this.homey.flow.getDeviceTriggerCard('zone_turned_off').registerArgumentAutocompleteListener('zone', autocomplete);
+    this.homey.flow.getActionCard('turn_zone_on').registerArgumentAutocompleteListener('zone', autocomplete);
+    this.homey.flow.getActionCard('turn_zone_off').registerArgumentAutocompleteListener('zone', autocomplete);
+    this.homey.flow.getConditionCard('is_zone_on').registerArgumentAutocompleteListener('zone', autocomplete);
   }
 
   /**

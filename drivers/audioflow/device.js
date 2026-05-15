@@ -45,7 +45,7 @@ class AudioflowDevice extends Homey.Device {
         await this.client.setZoneState(i, value);
         const triggerId = value ? 'zone_turned_on' : 'zone_turned_off';
         const zoneName = (this.getCapabilityOptions(capabilityId) || {}).title || `Zone ${i}`;
-        this.driver.getDeviceTriggerCard(triggerId)
+        this.homey.flow.getDeviceTriggerCard(triggerId)
           .trigger(this, { zone_name: zoneName }, { zone: String(i) })
           .catch(() => {});
       });
@@ -127,7 +127,7 @@ class AudioflowDevice extends Homey.Device {
             this.setCapabilityValue(capabilityId, isCurrentlyOn).catch(this.error);
             
             const triggerId = isCurrentlyOn ? 'zone_turned_on' : 'zone_turned_off';
-            this.driver.getDeviceTriggerCard(triggerId)
+            this.homey.flow.getDeviceTriggerCard(triggerId)
               .trigger(this, { zone_name: zoneName }, { zone: String(zoneNum) })
               .catch(() => {});
           }
