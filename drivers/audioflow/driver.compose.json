@@ -29,7 +29,7 @@
       "id": "ip_address",
       "type": "text",
       "label": { "en": "IP Address" },
-      "options": { "hidden": true } 
+      "hint": { "en": "The IP address of your Audioflow switch. Update this if the device gets a new IP address." }
     },
     {
       "id": "enabled_zone1",
@@ -69,9 +69,7 @@
   ],
   "repair": [
     {
-      "id": "list_devices",
-      "template": "list_devices",
-      "label": { "en": "Find new IP address" }
+      "id": "repair"
     }
   ],
   "images": {

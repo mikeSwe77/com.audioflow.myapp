@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .section { display: none; }
+    .scanning { text-align: center; padding: 20px 0; }
+    .scanning p { margin-bottom: 16px; color: #555; }
+    .found p, .manual p { margin-bottom: 16px; color: #555; }
+    .ip-highlight { font-weight: bold; color: #000; }
+    .homey-form-group { margin-bottom: 20px; }
+    .homey-form-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      margin: 0 auto;
+      border: 4px solid #e0e0e0;
+      border-top-color: #555;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body class="homey-form">
+
+  <!-- Scanning state -->
+  <div id="scanning" class="section scanning">
+    <p>Scanning your network for your Audioflow switch&hellip;</p>
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Auto-discovered state -->
+  <div id="found" class="section found">
+    <p>Your Audioflow switch was found at <span class="ip-highlight" id="found-ip"></span>.</p>
+    <button class="homey-button-primary-full" onclick="saveIp()">Update IP address</button>
+  </div>
+
+  <!-- Manual entry state (shown if auto-discovery fails) -->
+  <div id="manual" class="section manual">
+    <p>Your switch could not be found automatically. Please enter its current IP address.</p>
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="ip_address">IP Address</label>
+      <input class="homey-form-input" id="ip_address" type="text" placeholder="192.168.1.50" />
+    </div>
+    <button class="homey-button-primary-full" id="save-btn" onclick="saveManualIp()">Connect</button>
+  </div>
+
+  <script type="application/javascript">
+    var resolvedIp = null;
+
+    function show(id) {
+      ['scanning', 'found', 'manual'].forEach(function(s) {
+        document.getElementById(s).style.display = s === id ? 'block' : 'none';
+      });
+    }
+
+    function saveIp() {
+      Homey.emit('set_ip', { ip: resolvedIp }).then(function() {
+        Homey.done();
+      }).catch(function(err) {
+        Homey.alert(err.message || err);
+      });
+    }
+
+    function saveManualIp() {
+      var ip = document.getElementById('ip_address').value.trim();
+      if (!ip) return Homey.alert('Please enter an IP address.');
+      var btn = document.getElementById('save-btn');
+      btn.classList.add('is-loading');
+      Homey.emit('set_ip', { ip: ip }).then(function() {
+        Homey.done();
+      }).catch(function(err) {
+        btn.classList.remove('is-loading');
+        Homey.alert(err.message || err);
+      });
+    }
+
+    show('scanning');
+    Homey.emit('scan').then(function(result) {
+      if (result && result.found) {
+        resolvedIp = result.ip;
+        document.getElementById('found-ip').textContent = result.ip;
+        show('found');
+      } else {
+        show('manual');
+      }
+    }).catch(function() {
+      show('manual');
+    });
+  </script>
+</body>
+</html>

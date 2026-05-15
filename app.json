@@ -8,12 +8,12 @@
     "local"
   ],
   "support": "https://github.com/mikeSwe77/com.audioflow.myapp/",
-  "brandColor": "#00d4ff",
+  "brandColor": "#2ab9b5",
   "name": {
     "en": "Audioflow"
   },
   "description": {
-    "en": "Control Audioflow speaker switches"
+    "en": "Connect multiple pairs of speakers to your amplifier"
   },
   "category": [
     "music"
@@ -54,45 +54,11 @@
         "args": [
           {
             "name": "zone",
-            "type": "dropdown",
+            "type": "autocomplete",
             "title": {
               "en": "Zone",
               "sv": "Zon"
-            },
-            "label": {
-              "en": "Select Zone",
-              "sv": "Välj Zon"
-            },
-            "values": [
-              {
-                "id": "1",
-                "label": {
-                  "en": "Zone 1",
-                  "sv": "Zon 1"
-                }
-              },
-              {
-                "id": "2",
-                "label": {
-                  "en": "Zone 2",
-                  "sv": "Zon 2"
-                }
-              },
-              {
-                "id": "3",
-                "label": {
-                  "en": "Zone 3",
-                  "sv": "Zon 3"
-                }
-              },
-              {
-                "id": "4",
-                "label": {
-                  "en": "Zone 4",
-                  "sv": "Zon 4"
-                }
-              }
-            ]
+            }
           }
         ],
         "tokens": [
@@ -120,45 +86,11 @@
         "args": [
           {
             "name": "zone",
-            "type": "dropdown",
+            "type": "autocomplete",
             "title": {
               "en": "Zone",
               "sv": "Zon"
-            },
-            "label": {
-              "en": "Select Zone",
-              "sv": "Välj Zon"
-            },
-            "values": [
-              {
-                "id": "1",
-                "label": {
-                  "en": "Zone 1",
-                  "sv": "Zon 1"
-                }
-              },
-              {
-                "id": "2",
-                "label": {
-                  "en": "Zone 2",
-                  "sv": "Zon 2"
-                }
-              },
-              {
-                "id": "3",
-                "label": {
-                  "en": "Zone 3",
-                  "sv": "Zon 3"
-                }
-              },
-              {
-                "id": "4",
-                "label": {
-                  "en": "Zone 4",
-                  "sv": "Zon 4"
-                }
-              }
-            ]
+            }
           }
         ],
         "tokens": [
@@ -188,45 +120,11 @@
         "args": [
           {
             "name": "zone",
-            "type": "dropdown",
+            "type": "autocomplete",
             "title": {
               "en": "Zone",
               "sv": "Zon"
-            },
-            "label": {
-              "en": "Select Zone",
-              "sv": "Välj zon"
-            },
-            "values": [
-              {
-                "id": "1",
-                "label": {
-                  "en": "Zone 1",
-                  "sv": "Zon 1"
-                }
-              },
-              {
-                "id": "2",
-                "label": {
-                  "en": "Zone 2",
-                  "sv": "Zon 2"
-                }
-              },
-              {
-                "id": "3",
-                "label": {
-                  "en": "Zone 3",
-                  "sv": "Zon 3"
-                }
-              },
-              {
-                "id": "4",
-                "label": {
-                  "en": "Zone 4",
-                  "sv": "Zon 4"
-                }
-              }
-            ]
+            }
           }
         ]
       }
@@ -244,6 +142,17 @@
         }
       },
       {
+        "id": "turn_all_zones_on",
+        "title": {
+          "en": "Turn all zones on",
+          "sv": "Slå på alla zoner"
+        },
+        "titleFormatted": {
+          "en": "Turn all zones on",
+          "sv": "Slå på alla zoner"
+        }
+      },
+      {
         "id": "turn_zone_off",
         "title": {
           "en": "Turn a zone off",
@@ -256,45 +165,11 @@
         "args": [
           {
             "name": "zone",
-            "type": "dropdown",
+            "type": "autocomplete",
             "title": {
               "en": "Zone",
               "sv": "Zon"
-            },
-            "label": {
-              "en": "Select Zone",
-              "sv": "Välj zon"
-            },
-            "values": [
-              {
-                "id": "1",
-                "label": {
-                  "en": "Zone 1",
-                  "sv": "Zon 1"
-                }
-              },
-              {
-                "id": "2",
-                "label": {
-                  "en": "Zone 2",
-                  "sv": "Zon 2"
-                }
-              },
-              {
-                "id": "3",
-                "label": {
-                  "en": "Zone 3",
-                  "sv": "Zon 3"
-                }
-              },
-              {
-                "id": "4",
-                "label": {
-                  "en": "Zone 4",
-                  "sv": "Zon 4"
-                }
-              }
-            ]
+            }
           }
         ]
       },
@@ -311,45 +186,11 @@
         "args": [
           {
             "name": "zone",
-            "type": "dropdown",
+            "type": "autocomplete",
             "title": {
               "en": "Zone",
               "sv": "Zon"
-            },
-            "label": {
-              "en": "Select Zone",
-              "sv": "Välj zon"
-            },
-            "values": [
-              {
-                "id": "1",
-                "label": {
-                  "en": "Zone 1",
-                  "sv": "Zon 1"
-                }
-              },
-              {
-                "id": "2",
-                "label": {
-                  "en": "Zone 2",
-                  "sv": "Zon 2"
-                }
-              },
-              {
-                "id": "3",
-                "label": {
-                  "en": "Zone 3",
-                  "sv": "Zon 3"
-                }
-              },
-              {
-                "id": "4",
-                "label": {
-                  "en": "Zone 4",
-                  "sv": "Zon 4"
-                }
-              }
-            ]
+            }
           }
         ]
       }
@@ -415,8 +256,8 @@
           "label": {
             "en": "IP Address"
           },
-          "options": {
-            "hidden": true
+          "hint": {
+            "en": "The IP address of your Audioflow switch. Update this if the device gets a new IP address."
           }
         },
         {
@@ -471,11 +312,7 @@
       ],
       "repair": [
         {
-          "id": "list_devices",
-          "template": "list_devices",
-          "label": {
-            "en": "Find new IP address"
-          }
+          "id": "repair"
         }
       ],
       "images": {

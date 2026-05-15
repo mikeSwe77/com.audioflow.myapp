@@ -2,6 +2,7 @@
 
 const Homey = require('homey');
 const dgram = require('dgram');
+const AudioflowClient = require('../../lib/AudioflowClient');
 
 class AudioflowDriver extends Homey.Driver {
 
@@ -145,62 +146,72 @@ class AudioflowDriver extends Homey.Driver {
   }
 
   /**
-   * onRepair logic (IP Update) - Allows users to fix connection if IP changes.
+   * onRepair - Reconnects a device after its IP address has changed.
+   * Tries UDP auto-discovery first; falls back to manual IP entry.
    */
   async onRepair(session, device) {
-    this.log(`Repairing device ${device.getName()}...`);
-    let discoverySocket = null;
+    this.log(`Repair started for ${device.getName()}`);
+    let socket = null;
 
-    session.setHandler('list_devices', async () => {
+    // Auto-discovery: broadcast afping and match by serial number
+    session.setHandler('scan', async () => {
       return new Promise((resolve) => {
-        discoverySocket = dgram.createSocket('udp4');
-        const currentSerial = device.getStoreValue('serial'); 
-        
-        discoverySocket.on('message', (msg, rinfo) => {
+        const currentSerial = device.getStoreValue('serial');
+        let resolved = false;
+
+        socket = dgram.createSocket('udp4');
+
+        socket.on('message', (msg, rinfo) => {
           const magic = msg.slice(0, 6).toString();
-          if (magic === 'afpong') {
-            const serial = msg.slice(14, 30).toString().replace(/\0/g, '').trim();
-            
-            // If serial matches the device we are repairing, we found the new IP! 
-            if (serial === currentSerial) {
-              this.log(`Repair: Found new IP for ${serial}: ${rinfo.address}`);
-              
-              resolve([{
-                name: device.getName(),
-                data: { id: device.getData().id },
-                settings: { ip_address: rinfo.address } 
-              }]);
-              
-              try { discoverySocket.close(); } catch(e) {}
-              discoverySocket = null;
-            }
+          if (magic !== 'afpong' || resolved) return;
+
+          const serial = msg.slice(14, 30).toString().replace(/\0/g, '').trim();
+          if (serial === currentSerial) {
+            resolved = true;
+            this.log(`Repair: Found ${device.getName()} at new IP ${rinfo.address}`);
+            try { socket.close(); } catch (e) {}
+            socket = null;
+            resolve({ found: true, ip: rinfo.address });
           }
         });
 
-        // Use random port binding here as well
-        discoverySocket.bind(() => {
+        socket.bind(() => {
           try {
-            discoverySocket.setBroadcast(true);
-            const message = Buffer.from('afping');
-            discoverySocket.send(message, 0, message.length, 10499, '255.255.255.255');
+            socket.setBroadcast(true);
+            socket.send(Buffer.from('afping'), 0, 6, 10499, '255.255.255.255');
           } catch (err) {
-             this.error('Repair socket error:', err);
+            this.error('Repair scan error:', err);
           }
         });
 
-        // Timeout after 5s if not found
         setTimeout(() => {
-          if (discoverySocket) {
-             try { discoverySocket.close(); } catch(e) {}
-             resolve([]); // Return empty list if not found
+          if (!resolved) {
+            try { socket.close(); } catch (e) {}
+            socket = null;
+            this.log(`Repair: Auto-discovery timed out for ${device.getName()}`);
+            resolve({ found: false });
           }
         }, 5000);
       });
     });
-    
+
+    // Validate the IP by connecting, then save it
+    session.setHandler('set_ip', async ({ ip }) => {
+      const client = new AudioflowClient(ip);
+      try {
+        await client.getSwitch();
+      } catch (err) {
+        throw new Error(`Could not connect to Audioflow switch at ${ip}. Please check the IP address and try again.`);
+      }
+      await device.setSettings({ ip_address: ip });
+      device.updateClient(ip);
+      this.log(`Repair: IP updated to ${ip} for ${device.getName()}`);
+    });
+
     session.setHandler('disconnect', () => {
-      if (discoverySocket) {
-        try { discoverySocket.close(); } catch(e) {}
+      if (socket) {
+        try { socket.close(); } catch (e) {}
+        socket = null;
       }
     });
   }

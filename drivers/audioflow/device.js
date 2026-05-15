@@ -63,6 +63,11 @@ class AudioflowDevice extends Homey.Device {
     this._startPolling(pollInterval);
   }
 
+  updateClient(ip) {
+    this.client = new AudioflowClient(ip);
+    this.log(`Client reinitialized with new IP: ${ip}`);
+  }
+
   async onDeleted() {
     this.log('Device deleted, stopping polling...');
     if (this.pollingInterval) {
@@ -218,8 +223,14 @@ class AudioflowDevice extends Homey.Device {
   }
 
   async onSettings({ oldSettings, newSettings, changedKeys }) {
+    if (changedKeys.includes('ip_address')) {
+      const newIp = newSettings['ip_address'];
+      this.client = new AudioflowClient(newIp);
+      this.log(`IP address updated to ${newIp}, client reconnected`);
+    }
+
     for (const key of changedKeys) {
-      
+
       if (key.startsWith('enabled_zone')) {
         const zoneNum = parseInt(key.replace('enabled_zone', ''));
         // Safety check
